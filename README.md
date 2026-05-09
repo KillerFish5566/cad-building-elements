@@ -19,48 +19,62 @@
 
 ## Q2-1 類別架構圖 / Class Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                父類別：BuildingElement                           │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │ 共用屬性                                                  │   │
-│  │   element_id   圖元識別碼，對應 CAD Entity Handle         │   │
-│  │   layer        所在圖層名稱                               │   │
-│  │   level        所在樓層                                   │   │
-│  │   material     材質（可選）                               │   │
-│  ├─────────────────────────────────────────────────────────┤   │
-│  │ 方法                                                      │   │
-│  │   _key_mapping()          預設標籤對照表（可覆寫）         │   │
-│  │   _geometry_payload()     幾何資料（抽象，強制子類實作）   │   │
-│  │   to_dict()               統一 JSON 輸出入口              │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-                    │ 繼承（Inheritance）
-        ┌───────────┼───────────┐
-        ▼           ▼           ▼
-┌────────────┐ ┌────────────┐ ┌────────────┐
-│  Column    │ │   Wall     │ │   Slab     │
-│  （柱）    │ │  （牆）    │ │  （樓板）  │
-├────────────┤ ├────────────┤ ├────────────┤
-│ origin     │ │start_point │ │boundary_pts│
-│ height     │ │end_point   │ │thickness   │
-│section_w   │ │height      │ │elevation   │
-│section_d   │ │thickness   │ │opening_ids │
-│ rotation   │ │base_elev   │ │slope       │
-├────────────┤ ├────────────┤ ├────────────┤
-│key mapping │ │key mapping │ │key mapping │
-│覆寫：      │ │沿用預設值  │ │沿用預設值  │
-│element_id  │ │            │ │            │
-│→ col_id   │ │            │ │            │
-└────────────┘ └────────────┘ └────────────┘
-        │           │           │
-        └───────────┴───────────┘
-                    │
-                    ▼
-        ┌─────────────────────┐
-        │  JSON 輸出          │
-        │  → 交付下游 3D 模組  │
-        └─────────────────────┘
+```mermaid
+classDiagram
+    class BuildingElement {
+        <<Abstract>>
+        +str element_id
+        +str layer
+        +str level
+        +str material
+        +_key_mapping() dict
+        +_geometry_payload()* dict
+        +to_dict() dict
+    }
+
+    class Column {
+        +Point3D origin
+        +float height
+        +float section_width
+        +float section_depth
+        +float rotation
+        +_key_mapping() dict
+        +_geometry_payload() dict
+        --
+        element_id → col_id
+    }
+
+    class Wall {
+        +Point3D start_point
+        +Point3D end_point
+        +float height
+        +float thickness
+        +float base_elevation
+        +_geometry_payload() dict
+    }
+
+    class Slab {
+        +list boundary_pts
+        +float thickness
+        +float elevation
+        +list opening_ids
+        +float slope
+        +_geometry_payload() dict
+    }
+
+    class Point3D {
+        +float x
+        +float y
+        +float z
+        +to_dict() dict
+    }
+
+    BuildingElement <|-- Column : 繼承
+    BuildingElement <|-- Wall : 繼承
+    BuildingElement <|-- Slab : 繼承
+    Column ..> Point3D : uses
+    Wall ..> Point3D : uses
+    Slab ..> Point3D : uses
 ```
 
 ---
