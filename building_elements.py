@@ -6,7 +6,13 @@ CAD 建築構件解析 → JSON 輸出
 """
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 import json
+import sys
+
+# Windows console 預設編碼為 cp1252，無法輸出中文，改為 UTF-8
+if sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
 
 
 # ── 幾何座標點資料結構 ─────────────────────────────────────────────
