@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 output.json
+
+# 原件與含個資的文件，永不進版控
+_private/
