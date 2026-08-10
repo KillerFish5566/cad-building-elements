@@ -1,8 +1,9 @@
 """
-程式設計與物件導向
-CAD 建築構件解析 → JSON 輸出
+建築構件資料結構：CAD 建築構件解析 → JSON 輸出
 
 資料流：CAD 圖面（.dwg）→ 本程式解析 → output.json → 下游 3D 模組
+
+設計說明見 docs/02-element-data-structure.md
 """
 
 from abc import ABC, abstractmethod
