@@ -1,6 +1,40 @@
-__pycache__/
-*.py[cod]
 output.json
 
 # 原件與含個資的文件，永不進版控
 _private/
+
+# ── 機密與金鑰：永不進版控 ──
+.env
+.env.*
+secrets.*
+*.local.*
+credentials.*
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+
+# ── AI 工具的個人設定、逐字稿與記憶 ──
+.claude/
+*.jsonl
+memory/
+
+# ── IDE 個人設定 ──
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*~
+
+# ── Python 暫存 ──
+__pycache__/
+*.py[cod]
+
+# ── 作業系統暫存 ──
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
